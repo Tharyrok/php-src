@@ -93,7 +93,7 @@ static int get_pdo_param_type(zval *parameter)
 			break;
 		case IS_LONG:
 		case IS_DOUBLE:
-			return PDO_PARAM_INT;
+			return PDO_PARAM_FLOAT;
 			break;
 		case IS_OBJECT:
 		default:
@@ -259,8 +259,15 @@ safe:
 
 				param->param_type = get_pdo_param_type(parameter);
 				if(param->param_type == PDO_PARAM_STR && Z_TYPE_P(parameter) != IS_STRING) {
+					printf("convert parameter to string in quoter\n");
 					convert_to_string(parameter);
 				}
+				/*
+				if(param->param_type == PDO_PARAM_FLOAT) {
+					printf("convert parameter to float in quoter\n");
+					convert_to_double(parameter);
+				}
+				*/
 
 				if (param->param_type == PDO_PARAM_LOB && Z_TYPE_P(parameter) == IS_RESOURCE) {
 					php_stream *stm;
@@ -301,8 +308,11 @@ safe:
 						param_type = PDO_PARAM_NULL;
 					}
 
+					printf("Convert parameters\n");
+
 					switch (param_type) {
 						case PDO_PARAM_BOOL:
+							printf("parameter %s is bool\n", ZSTR_VAL(param->name));
 							plc->quoted = zend_is_true(parameter) ? "1" : "0";
 							plc->qlen = sizeof("1")-1;
 							plc->freeq = 0;
@@ -310,6 +320,14 @@ safe:
 
 						case PDO_PARAM_INT:
 							buf = zend_long_to_str(zval_get_long(parameter));
+
+							plc->qlen = ZSTR_LEN(buf);
+							plc->quoted = estrdup(ZSTR_VAL(buf));
+							plc->freeq = 1;
+							break;
+
+						case PDO_PARAM_FLOAT:
+							buf = zend_strpprintf(0, "%.*G", (int) EG(precision), zval_get_double(parameter));
 
 							plc->qlen = ZSTR_LEN(buf);
 							plc->quoted = estrdup(ZSTR_VAL(buf));
@@ -344,6 +362,7 @@ safe:
 					}
 				}
 			} else {
+				printf("else\n");
 				zval *parameter;
 				if (Z_ISREF(param->parameter)) {
 					parameter = Z_REFVAL(param->parameter);

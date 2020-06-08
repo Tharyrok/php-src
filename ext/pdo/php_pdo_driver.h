@@ -72,6 +72,8 @@ enum pdo_param_type {
 	 */
 	PDO_PARAM_ZVAL,
 
+	PDO_PARAM_FLOAT,
+
 	PDO_PARAM_AUTO,
 
 	/* magic flag to denote a parameter as being input/output */
