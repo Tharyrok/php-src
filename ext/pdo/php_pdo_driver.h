@@ -72,6 +72,8 @@ enum pdo_param_type {
 	 */
 	PDO_PARAM_ZVAL,
 
+	PDO_PARAM_AUTO,
+
 	/* magic flag to denote a parameter as being input/output */
 	PDO_PARAM_INPUT_OUTPUT = 0x80000000,
 

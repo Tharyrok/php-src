@@ -1311,6 +1311,7 @@ void pdo_dbh_init(void)
 	pdo_dbh_object_handlers.compare = dbh_compare;
 	pdo_dbh_object_handlers.get_gc = dbh_get_gc;
 
+	REGISTER_PDO_CLASS_CONST_LONG("PARAM_AUTO", (zend_long)PDO_PARAM_AUTO);
 	REGISTER_PDO_CLASS_CONST_LONG("PARAM_BOOL", (zend_long)PDO_PARAM_BOOL);
 	REGISTER_PDO_CLASS_CONST_LONG("PARAM_NULL", (zend_long)PDO_PARAM_NULL);
 	REGISTER_PDO_CLASS_CONST_LONG("PARAM_INT",  (zend_long)PDO_PARAM_INT);

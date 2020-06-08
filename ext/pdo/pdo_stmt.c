@@ -381,7 +381,7 @@ PHP_METHOD(PDOStatement, execute)
 				param.paramno = num_index;
 			}
 
-			param.param_type = PDO_PARAM_STR;
+			param.param_type = PDO_PARAM_AUTO;
 			ZVAL_COPY(&param.parameter, tmp);
 
 			if (!really_register_bound_param(&param, stmt, 1)) {
@@ -1445,7 +1445,7 @@ PHP_METHOD(PDOStatement, fetchAll)
 static int register_bound_param(INTERNAL_FUNCTION_PARAMETERS, pdo_stmt_t *stmt, int is_param) /* {{{ */
 {
 	struct pdo_bound_param_data param;
-	zend_long param_type = PDO_PARAM_STR;
+	zend_long param_type = PDO_PARAM_AUTO;
 	zval *parameter, *driver_params = NULL;
 
 	memset(&param, 0, sizeof(param));
@@ -1489,7 +1489,7 @@ static int register_bound_param(INTERNAL_FUNCTION_PARAMETERS, pdo_stmt_t *stmt, 
 PHP_METHOD(PDOStatement, bindValue)
 {
 	struct pdo_bound_param_data param;
-	zend_long param_type = PDO_PARAM_STR;
+	zend_long param_type = PDO_PARAM_AUTO;
 	zval *parameter;
 	PHP_STMT_GET_OBJ;
 

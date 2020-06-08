@@ -81,6 +81,31 @@ static void free_param_name(zval *el) {
 	efree(Z_PTR_P(el));
 }
 
+static int get_pdo_param_type(zval *parameter)
+{
+	switch(Z_TYPE_P(parameter)) {
+		case IS_NULL:
+			return PDO_PARAM_NULL;
+			break;
+		case IS_FALSE:
+		case IS_TRUE:
+			return PDO_PARAM_BOOL;
+			break;
+		case IS_LONG:
+		case IS_DOUBLE:
+			return PDO_PARAM_INT;
+			break;
+		case IS_OBJECT:
+		default:
+			if (!try_convert_to_string(parameter)) {
+				return -1;
+			}
+		case IS_STRING:
+			return PDO_PARAM_STR;
+			break;
+	}
+}
+
 PDO_API int pdo_parse_params(pdo_stmt_t *stmt, char *inquery, size_t inquery_len,
 	char **outquery, size_t *outquery_len)
 {
@@ -231,6 +256,12 @@ safe:
 				} else {
 					parameter = &param->parameter;
 				}
+
+				param->param_type = get_pdo_param_type(parameter);
+				if(param->param_type == PDO_PARAM_STR && Z_TYPE_P(parameter) != IS_STRING) {
+					convert_to_string(parameter);
+				}
+
 				if (param->param_type == PDO_PARAM_LOB && Z_TYPE_P(parameter) == IS_RESOURCE) {
 					php_stream *stm;
 
