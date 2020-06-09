@@ -306,11 +306,8 @@ safe:
 						param_type = PDO_PARAM_NULL;
 					}
 
-					printf("Convert parameters\n");
-
 					switch (param_type) {
 						case PDO_PARAM_BOOL:
-							printf("parameter %s is bool\n", ZSTR_VAL(param->name));
 							plc->quoted = zend_is_true(parameter) ? "1" : "0";
 							plc->qlen = sizeof("1")-1;
 							plc->freeq = 0;
@@ -360,7 +357,6 @@ safe:
 					}
 				}
 			} else {
-				printf("else\n");
 				zval *parameter;
 				if (Z_ISREF(param->parameter)) {
 					parameter = Z_REFVAL(param->parameter);
