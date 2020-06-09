@@ -235,19 +235,6 @@ static int really_register_bound_param(struct pdo_bound_param_data *param, pdo_s
 		}
 	}
 
-	/*
-	if ((PDO_PARAM_TYPE(param->param_type) == PDO_PARAM_AUTO || PDO_PARAM_TYPE(param->param_type) == PDO_PARAM_INT) && (Z_TYPE_P(parameter) == IS_FALSE || Z_TYPE_P(parameter) == IS_TRUE)) {
-		convert_to_boolean(parameter);
-	} else if ((PDO_PARAM_TYPE(param->param_type) == PDO_PARAM_AUTO || PDO_PARAM_TYPE(param->param_type) == PDO_PARAM_BOOL) && Z_TYPE_P(parameter) == IS_LONG) {
-		convert_to_long(parameter);
-	} else if ((PDO_PARAM_TYPE(param->param_type) == PDO_PARAM_AUTO || PDO_PARAM_TYPE(param->param_type) == PDO_PARAM_FLOAT) && Z_TYPE_P(parameter) == IS_DOUBLE) {
-		convert_to_double(parameter);
-	} else if ((PDO_PARAM_TYPE(param->param_type) == PDO_PARAM_AUTO || PDO_PARAM_TYPE(param->param_type) == PDO_PARAM_STR) && param->max_value_len <= 0 && !Z_ISNULL_P(parameter)) {
-		if (!try_convert_to_string(parameter)) {
-			return 0;
-		}
-	}
-	*/
 	param->stmt = stmt;
 	param->is_param = is_param;
 
@@ -497,18 +484,6 @@ static inline void fetch_value(pdo_stmt_t *stmt, zval *dest, int colno, int *typ
 				ZVAL_LONG(dest, *(zend_long*)value);
 				break;
 			}
-			ZVAL_NULL(dest);
-			break;
-
-		case PDO_PARAM_FLOAT:
-			// convert_to_double();
-			// if (value && value_len == sizeof(zend_double)) {
-				// zend_dval_to_lval(Z_DVAL_P(value))
-				// ZVAL_DOUBLE(dest, zend_dval_to_lval());
-				ZVAL_DOUBLE(dest, 0.5);
-				// ZVAL_DOUBLE(dest, (double) Z_LVAL_P(value));
-				break;
-			// }
 			ZVAL_NULL(dest);
 			break;
 

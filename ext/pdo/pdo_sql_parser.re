@@ -92,6 +92,8 @@ static int get_pdo_param_type(zval *parameter)
 			return PDO_PARAM_BOOL;
 			break;
 		case IS_LONG:
+			return PDO_PARAM_INT;
+			break;
 		case IS_DOUBLE:
 			return PDO_PARAM_FLOAT;
 			break;
@@ -259,15 +261,11 @@ safe:
 
 				param->param_type = get_pdo_param_type(parameter);
 				if(param->param_type == PDO_PARAM_STR && Z_TYPE_P(parameter) != IS_STRING) {
-					printf("convert parameter to string in quoter\n");
 					convert_to_string(parameter);
 				}
-				/*
 				if(param->param_type == PDO_PARAM_FLOAT) {
-					printf("convert parameter to float in quoter\n");
 					convert_to_double(parameter);
 				}
-				*/
 
 				if (param->param_type == PDO_PARAM_LOB && Z_TYPE_P(parameter) == IS_RESOURCE) {
 					php_stream *stm;

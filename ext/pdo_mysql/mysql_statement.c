@@ -576,6 +576,13 @@ static int pdo_mysql_stmt_param_hook(pdo_stmt_t *stmt, struct pdo_bound_param_da
 					parameter = Z_REFVAL(param->parameter);
 				}
 				switch (Z_TYPE_P(parameter)) {
+					case IS_TRUE:
+					case IS_FALSE:
+						b->buffer_type = MYSQL_TYPE_TINY;
+						b->buffer = &Z_LVAL_P(parameter);
+						*b->length = 1;
+						PDO_DBG_RETURN(1);
+
 					case IS_STRING:
 						b->buffer_type = MYSQL_TYPE_STRING;
 						b->buffer = Z_STRVAL_P(parameter);
